@@ -25,7 +25,7 @@ airflow:
       variable_value:
 AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
 AIRFLOW__SMTP__SMTP_STARTTLS: "True"
-AIRFLOW__SMTP__SMTP_USER: maryaysabellacolatino17@gmail.com
-AIRFLOW__SMTP__SMTP_PASSWORD: cdxqzpvaeppxqiyv
+AIRFLOW__SMTP__SMTP_USER: User gmail
+AIRFLOW__SMTP__SMTP_PASSWORD: user senha
 AIRFLOW__SMTP__SMTP_PORT: 587
-AIRFLOW__SMTP__SMTP_MAIL_FROM: maryaysabellacolatino17@gmail.com
+AIRFLOW__SMTP__SMTP_MAIL_FROM: user gmail

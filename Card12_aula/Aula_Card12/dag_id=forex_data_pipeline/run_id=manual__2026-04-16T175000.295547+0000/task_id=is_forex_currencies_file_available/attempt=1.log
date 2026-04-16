@@ -1,0 +1,28 @@
+Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_data_pipeline.is_forex_currencies_file_available manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_data_pipeline.is_forex_currencies_file_available manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Starting attempt 1 of 3
+Executing <Task(FileSensor): is_forex_currencies_file_available> on 2026-04-16 17:50:00.295547+00:00
+Started process 500 to run task
+Running: ['***', 'tasks', 'run', 'forex_data_pipeline', 'is_forex_currencies_file_available', 'manual__2026-04-16T17:50:00.295547+00:00', '--job-id', '60', '--raw', '--subdir', 'DAGS_FOLDER/forex_data_pipeline.py', '--cfg-path', '/tmp/tmp7u433w_z']
+Job 60: Subtask is_forex_currencies_file_available
+Running <TaskInstance: forex_data_pipeline.is_forex_currencies_file_available manual__2026-04-16T17:50:00.295547+00:00 [running]> on host 3039f9137920
+Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='forex_data_pipeline' AIRFLOW_CTX_TASK_ID='is_forex_currencies_file_available' AIRFLOW_CTX_EXECUTION_DATE='2026-04-16T17:50:00.295547+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-16T17:50:00.295547+00:00'
+Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/sensors/base.py", line 257, in execute
+    raise e
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/sensors/base.py", line 239, in execute
+    poke_return = self.poke(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/sensors/filesystem.py", line 61, in poke
+    hook = FSHook(self.fs_conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/hooks/filesystem.py", line 38, in __init__
+    conn = self.get_connection(conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/hooks/base.py", line 72, in get_connection
+    conn = Connection.get_connection_from_secrets(conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/connection.py", line 477, in get_connection_from_secrets
+    raise AirflowNotFoundException(f"The conn_id `{conn_id}` isn't defined")
+airflow.exceptions.AirflowNotFoundException: The conn_id `forex_path` isn't defined
+Marking task as UP_FOR_RETRY. dag_id=forex_data_pipeline, task_id=is_forex_currencies_file_available, execution_date=20260416T175000, start_date=20260416T181059, end_date=20260416T181059
+Failed to execute job 60 for task is_forex_currencies_file_available (The conn_id `forex_path` isn't defined; 500)
+Task exited with return code 1
+0 downstream tasks scheduled from follow-on schedule check

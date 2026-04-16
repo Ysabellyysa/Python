@@ -1,0 +1,23 @@
+Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_data_pipeline.saving_rates manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_data_pipeline.saving_rates manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Starting attempt 1 of 3
+Executing <Task(BashOperator): saving_rates> on 2026-04-16 17:50:00.295547+00:00
+Started process 506 to run task
+Running: ['***', 'tasks', 'run', 'forex_data_pipeline', 'saving_rates', 'manual__2026-04-16T17:50:00.295547+00:00', '--job-id', '62', '--raw', '--subdir', 'DAGS_FOLDER/forex_data_pipeline.py', '--cfg-path', '/tmp/tmpi8ygxcl4']
+Job 62: Subtask saving_rates
+Running <TaskInstance: forex_data_pipeline.saving_rates manual__2026-04-16T17:50:00.295547+00:00 [running]> on host 3039f9137920
+Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='forex_data_pipeline' AIRFLOW_CTX_TASK_ID='saving_rates' AIRFLOW_CTX_EXECUTION_DATE='2026-04-16T17:50:00.295547+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-16T17:50:00.295547+00:00'
+Tmp dir root location: /tmp
+Running command: ['/bin/bash', '-c', '\n            hdfs dfs -mkdir -p /forex_data &&             hdfs dfs -put -f /opt/***/dags/files/forex_rates.json /forex_data\n        ']
+Output:
+/bin/bash: line 2: hdfs: command not found
+Command exited with return code 127
+Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/bash.py", line 210, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 127.
+Marking task as UP_FOR_RETRY. dag_id=forex_data_pipeline, task_id=saving_rates, execution_date=20260416T175000, start_date=20260416T181116, end_date=20260416T181116
+Failed to execute job 62 for task saving_rates (Bash command failed. The command returned a non-zero exit code 127.; 506)
+Task exited with return code 1
+0 downstream tasks scheduled from follow-on schedule check

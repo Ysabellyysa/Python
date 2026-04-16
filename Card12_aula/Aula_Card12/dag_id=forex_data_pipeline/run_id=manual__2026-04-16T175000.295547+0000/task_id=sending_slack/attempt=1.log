@@ -1,0 +1,37 @@
+Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: forex_data_pipeline.sending_slack manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: forex_data_pipeline.sending_slack manual__2026-04-16T17:50:00.295547+00:00 [queued]>
+Starting attempt 1 of 3
+Executing <Task(SlackWebhookOperator): sending_slack> on 2026-04-16 17:50:00.295547+00:00
+Started process 529 to run task
+Running: ['***', 'tasks', 'run', 'forex_data_pipeline', 'sending_slack', 'manual__2026-04-16T17:50:00.295547+00:00', '--job-id', '65', '--raw', '--subdir', 'DAGS_FOLDER/forex_data_pipeline.py', '--cfg-path', '/tmp/tmpp1yyv0bj']
+Job 65: Subtask sending_slack
+Running <TaskInstance: forex_data_pipeline.sending_slack manual__2026-04-16T17:50:00.295547+00:00 [running]> on host 3039f9137920
+Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='forex_data_pipeline' AIRFLOW_CTX_TASK_ID='sending_slack' AIRFLOW_CTX_EXECUTION_DATE='2026-04-16T17:50:00.295547+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-16T17:50:00.295547+00:00'
+/home/***/.local/lib/python3.8/site-packages/***/providers/slack/hooks/slack_webhook.py:42: UserWarning: You cannot override the default channel (chosen by the user who installed your app), username, or icon when you're using Incoming Webhooks to post messages. Instead, these values will always inherit from the associated Slack app configuration. See: https://api.slack.com/messaging/webhooks#advanced_message_formatting. It is possible to change this values only in Legacy Slack Integration Incoming Webhook: https://api.slack.com/legacy/custom-integrations/messaging/webhooks#legacy-customizations
+  resp = func(*args, **kwargs)
+
+Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/operators/slack_webhook.py", line 112, in execute
+    self.hook.send(
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/hooks/slack_webhook.py", line 249, in send
+    return self.send_dict(body=body, headers=headers)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/hooks/slack_webhook.py", line 42, in wrapper
+    resp = func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/hooks/slack_webhook.py", line 206, in send_dict
+    return self.client.send_dict(body, headers=headers)
+  File "/usr/local/lib/python3.8/functools.py", line 967, in __get__
+    val = self.func(instance)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/hooks/slack_webhook.py", line 134, in client
+    return WebhookClient(**self._get_conn_params())
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/providers/slack/hooks/slack_webhook.py", line 142, in _get_conn_params
+    conn = self.get_connection(self.slack_webhook_conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/hooks/base.py", line 72, in get_connection
+    conn = Connection.get_connection_from_secrets(conn_id)
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/connection.py", line 477, in get_connection_from_secrets
+    raise AirflowNotFoundException(f"The conn_id `{conn_id}` isn't defined")
+airflow.exceptions.AirflowNotFoundException: The conn_id `slack_conn` isn't defined
+Marking task as UP_FOR_RETRY. dag_id=forex_data_pipeline, task_id=sending_slack, execution_date=20260416T175000, start_date=20260416T181131, end_date=20260416T181131
+Failed to execute job 65 for task sending_slack (The conn_id `slack_conn` isn't defined; 529)
+Task exited with return code 1
+0 downstream tasks scheduled from follow-on schedule check

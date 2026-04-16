@@ -1,0 +1,16 @@
+Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_pratica_simples.criar_pasta scheduled__2024-01-01T00:00:00+00:00 [queued]>
+Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_pratica_simples.criar_pasta scheduled__2024-01-01T00:00:00+00:00 [queued]>
+Starting attempt 1 of 1
+Executing <Task(BashOperator): criar_pasta> on 2024-01-01 00:00:00+00:00
+Started process 397 to run task
+Running: ['***', 'tasks', 'run', 'dag_pratica_simples', 'criar_pasta', 'scheduled__2024-01-01T00:00:00+00:00', '--job-id', '54', '--raw', '--subdir', 'DAGS_FOLDER/prática_12.py', '--cfg-path', '/tmp/tmpvasni6y6']
+Job 54: Subtask criar_pasta
+Running <TaskInstance: dag_pratica_simples.criar_pasta scheduled__2024-01-01T00:00:00+00:00 [running]> on host 3039f9137920
+Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='dag_pratica_simples' AIRFLOW_CTX_TASK_ID='criar_pasta' AIRFLOW_CTX_EXECUTION_DATE='2024-01-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-01-01T00:00:00+00:00'
+Tmp dir root location: /tmp
+Running command: ['/bin/bash', '-c', 'mkdir -p /opt/***/dags/saida_pratica']
+Output:
+Command exited with return code 0
+Marking task as SUCCESS. dag_id=dag_pratica_simples, task_id=criar_pasta, execution_date=20240101T000000, start_date=20260416T180544, end_date=20260416T180544
+Task exited with return code 0
+1 downstream tasks scheduled from follow-on schedule check

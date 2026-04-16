@@ -1,0 +1,14 @@
+Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_pratica_simples.aviso_final scheduled__2024-01-01T00:00:00+00:00 [queued]>
+Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_pratica_simples.aviso_final scheduled__2024-01-01T00:00:00+00:00 [queued]>
+Starting attempt 1 of 1
+Executing <Task(PythonOperator): aviso_final> on 2024-01-01 00:00:00+00:00
+Started process 411 to run task
+Running: ['***', 'tasks', 'run', 'dag_pratica_simples', 'aviso_final', 'scheduled__2024-01-01T00:00:00+00:00', '--job-id', '57', '--raw', '--subdir', 'DAGS_FOLDER/prática_12.py', '--cfg-path', '/tmp/tmpgd9e7x38']
+Job 57: Subtask aviso_final
+Running <TaskInstance: dag_pratica_simples.aviso_final scheduled__2024-01-01T00:00:00+00:00 [running]> on host 3039f9137920
+Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='dag_pratica_simples' AIRFLOW_CTX_TASK_ID='aviso_final' AIRFLOW_CTX_EXECUTION_DATE='2024-01-01T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-01-01T00:00:00+00:00'
+Processamento concluído
+Done. Returned value was: None
+Marking task as SUCCESS. dag_id=dag_pratica_simples, task_id=aviso_final, execution_date=20240101T000000, start_date=20260416T180549, end_date=20260416T180549
+Task exited with return code 0
+0 downstream tasks scheduled from follow-on schedule check

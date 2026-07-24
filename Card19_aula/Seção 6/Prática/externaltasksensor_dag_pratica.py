@@ -4,18 +4,17 @@ from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
-# Este DAG aguarda o DAG de processamento de pagamentos concluir
-
+#Dag aguardando processamento concluir
 default_args = {
-    'owner': 'Ronny_Pratica',
-    'start_date': datetime(2026, 1, 1),
+    'owner': 'Marya',
+    'start_date': datetime(2019, 1, 1),
 }
 
 def liberar_envio():
-    print("Pagamento confirmado! Liberando separação do produto no estoque.")
+    print("Pagamento confirmado!")
 
 def notificar_cliente():
-    print("Notificação enviada ao cliente: seu pedido está a caminho!")
+    print("Notificação enviada ao cliente!")
 
 with DAG(
     dag_id='externalsensor_pratica_dag',
@@ -25,14 +24,13 @@ with DAG(
     tags=['aula', 'sensor']
 ) as dag:
 
-    # Aguarda a task confirmar_pagamento do DAG de pagamentos concluir
     aguardar_pagamento = ExternalTaskSensor(
         task_id='aguardar_confirmacao_pagamento',
-        external_dag_id='pagamentos_dag',       # DAG que precisa terminar primeiro
-        external_task_id='confirmar_pagamento', # task específica que deve ter sucesso
-        mode='poke',      # verifica periodicamente 
-        timeout=600,      # desiste após 10 minutos
-        poke_interval=30  # verifica a cada 30 segundos
+        external_dag_id='pagamentos_dag',       # DAG precisa finalizar pra continuar
+        external_task_id='confirmar_pagamento', 
+        mode='poke',      
+        timeout=600,    
+        poke_interval=30 
     )
 
     liberar = PythonOperator(

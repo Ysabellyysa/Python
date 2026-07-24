@@ -3,8 +3,8 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
 
 default_args = {
-    'start_date': datetime(2026, 1, 1),
-    'owner': 'Ronny_Pratica',
+    'start_date': datetime(2019, 1, 1),
+    'owner': 'Marya',
 }
 
 with DAG(dag_id='pool_pratica_dag', schedule='@daily', default_args=default_args, catchup=False) as dag:

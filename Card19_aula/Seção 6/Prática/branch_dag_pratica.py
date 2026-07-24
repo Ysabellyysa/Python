@@ -5,13 +5,12 @@ from datetime import datetime
 
 # Branch DAG
 default_args = {
-    'owner': 'Ronny_Pratica',
-    'start_date': datetime(2026, 1, 1),
+    'owner': 'Marya',
+    'start_date': datetime(2019, 1, 1),
 }
 
 def verificar_tipo_pedido(**context):
-    # Branch baseado no valores simulados
-    valor = 150  # em produção viria de uma variavel 
+    valor = 150  
     if valor < 100:
         return 'pedido_pequeno'
     elif valor < 500:
@@ -20,21 +19,21 @@ def verificar_tipo_pedido(**context):
         return 'pedido_grande'
 
 def processar_pequeno():
-    print("Pedido pequeno: envio padrão em até 7 dias")
+    print("Pedido pequeno: envio padrão")
 
 def processar_medio():
-    print("Pedido médio: envio expresso em até 3 dias")
+    print("Pedido médio: envio expresso")
 
 def processar_grande():
-    print("Pedido grande: envio prioritário com seguro incluso")
+    print("Pedido grande: envio prioritário")
 
 def finalizar_pedido():
-    print("Pedido registrado e confirmação enviada ao cliente!")
+    print("Pedido registrado e confirmação enviado ao cliente!")
 
 with DAG(
     dag_id='branch_pratica_dag',
     default_args=default_args,
-    schedule=None,  # schedule em vez de schedule_interval
+    schedule=None,  
     catchup=False,
     tags=['aula', 'branch']
 ) as dag:

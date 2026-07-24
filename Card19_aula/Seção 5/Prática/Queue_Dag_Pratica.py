@@ -2,10 +2,9 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime
 
-# normal padrão
 default_args = {
-    'start_date': datetime(2026, 1, 1),
-    'owner': 'Ronny_Pratica',
+    'start_date': datetime(2019, 1, 1),
+    'owner': 'Marya',
 }
 
 with DAG(
@@ -16,17 +15,16 @@ with DAG(
     tags=['aula', 'infra']
 ) as dag:
 
-    # Esta tarefa será enviada para a fila padrão 
     tarefa_comum = BashOperator(
         task_id='tarefa_geral',
-        bash_command='echo "Rodando no worker padrão"',
+        bash_command='echo "Rodando worker padrão"',
         queue='default'
     )
 
-    #esta tarefa seria direcionada para um worker com GPU ou mais Spark e o parâmetro queue é o que define para onde a tarefa fica
+    #esta tarefa seria direcionada para um worker com GPU,mas Spark e o parâmetro que é o que define para onde a tarefa fica
     tarefa_especifica = BashOperator(
         task_id='tarefa_pesada_especial',
-        bash_command='echo "Rodando em máquina de alta performance"',
+        bash_command='echo "Rodando máquina de alta performance"',
         queue='high_mem_queue' 
     )
 

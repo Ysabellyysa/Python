@@ -4,18 +4,16 @@ from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
-# passando o ID do pedido e o valor via conf
-
 default_args = {
-    'owner': 'Ronny_Pratica',
-    'start_date': datetime(2026, 1, 1),
+    'owner': 'Marya',
+    'start_date': datetime(2019, 1, 1),
 }
 
 def preparar_dados():
-    print("Dados do pedido validados e prontos para envio ao DAG de processamento.")
+    print("Dados do pedido validados!")
 
 with DAG(
-    dag_id='triggerdagop_controller_pratica',
+    dag_id='triggerdagop_pratica',
     default_args=default_args,
     schedule='@once',
     catchup=False,
@@ -23,20 +21,19 @@ with DAG(
 ) as dag:
 
     preparar = PythonOperator(
-        task_id='preparar_dados_pedido',
+        task_id='dados_pedido',
         python_callable=preparar_dados
     )
 
-    # Dispara o DAG alvo
     disparar = TriggerDagRunOperator(
-        task_id='disparar_processamento_pedido',
-        trigger_dag_id='triggerdagop_target_pratica',  # DAG que sera disparado
+        task_id='processamento_pedido',
+        trigger_dag_id='triggerdagop_pratica',  
         conf={
-            'pedido_id': 'PED-2026-001',
-            'valor': 350.00,
-            'cliente': 'Ronny'
+            'pedido_id': 'PED-2019-001',
+            'valor': 150.00,
+            'cliente': 'Marya'
         },
-        wait_for_completion=False  # não bloqueia este DAG aguardando o outro terminar
+        wait_for_completion=False  
     )
 
     fim = EmptyOperator(task_id='fim')

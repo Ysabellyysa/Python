@@ -4,17 +4,17 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.subdag import SubDagOperator
 from datetime import datetime
 
-# SubDAG para agrupar etapas de validação de dados de um relatório
 
+#SubDag de validação de dados
 default_args = {
-    'owner': 'Ronny_Pratica',
-    'start_date': datetime(2026, 1, 1),
+    'start_date': datetime(2019, 1, 1),
+    'owner': 'Marya',
 }
 
 DAG_NAME = 'subdag_pratica_dag'
 
-def criar_subdag_validacao(parent_dag_name, child_dag_name, args):
-    #Subdag com duas etapas de validação de dados
+def subdag_validacao(parent_dag_name, child_dag_name, args):
+    #Subdag com duas etapas de validação 
     subdag = DAG(
         dag_id=f'{parent_dag_name}.{child_dag_name}',
         default_args=args,
@@ -22,10 +22,10 @@ def criar_subdag_validacao(parent_dag_name, child_dag_name, args):
     )
 
     def checar_nulos():
-        print("Verificando campos nulos nos dados...")
+        print("Verificando campos nulos")
 
     def checar_duplicatas():
-        print("Verificando registros duplicados...")
+        print("Verificando registros duplicados")
 
     checar_nulos_task = PythonOperator(
         task_id='checar_nulos',
@@ -43,7 +43,7 @@ def criar_subdag_validacao(parent_dag_name, child_dag_name, args):
     return subdag
 
 
-def criar_subdag_relatorio(parent_dag_name, child_dag_name, args):
+def subdag_relatorio(parent_dag_name, child_dag_name, args):
     # Subdag com duas etapas de geração de relatório
     subdag = DAG(
         dag_id=f'{parent_dag_name}.{child_dag_name}',
@@ -51,14 +51,14 @@ def criar_subdag_relatorio(parent_dag_name, child_dag_name, args):
         schedule='@once',
     )
 
-    def gerar_pdf():
-        print("Gerando relatório em PDF...")
+    def cria_pdf():
+        print("Gerando relatório em PDF")
 
     def enviar_email():
-        print("Enviando relatório por e-mail...")
+        print("Enviando relatório por e-mail")
 
     gerar_pdf_task = PythonOperator(
-        task_id='gerar_pdf',
+        task_id='cria_pdf',
         python_callable=gerar_pdf,
         dag=subdag
     )
@@ -69,7 +69,7 @@ def criar_subdag_relatorio(parent_dag_name, child_dag_name, args):
         dag=subdag
     )
 
-    gerar_pdf_task >> enviar_email_task
+    cria_pdf_task >> enviar_email_task
     return subdag
 
 
@@ -85,12 +85,12 @@ with DAG(
 
     validacao = SubDagOperator(
         task_id='subdag_validacao',
-        subdag=criar_subdag_validacao(DAG_NAME, 'subdag_validacao', default_args)
+        subdag=subdag_validacao(DAG_NAME, 'subdag_validacao', default_args)
     )
 
     relatorio = SubDagOperator(
         task_id='subdag_relatorio',
-        subdag=criar_subdag_relatorio(DAG_NAME, 'subdag_relatorio', default_args)
+        subdag=subdag_relatorio(DAG_NAME, 'subdag_relatorio', default_args)
     )
 
     fim = EmptyOperator(task_id='fim')

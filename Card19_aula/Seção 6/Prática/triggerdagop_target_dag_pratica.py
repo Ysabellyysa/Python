@@ -4,15 +4,12 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
 
-# Este DAG é disparado pelo controller e recebe os dados do pedido via conf
-
 default_args = {
-    'owner': 'Ronny_Pratica',
-    'start_date': datetime(2026, 1, 1),
+    'owner': 'Marya',
+    'start_date': datetime(2019, 1, 1),
 }
 
 def processar_pedido(**context):
-    # recupera os dados passados pelo controller via conf
     conf = context['dag_run'].conf
     pedido_id = conf.get('pedido_id', 'desconhecido')
     valor     = conf.get('valor', 0)
@@ -22,9 +19,9 @@ def processar_pedido(**context):
     print(f"Valor total: R$ {valor:.2f}")
 
     if valor >= 300:
-        print("Pedido qualifica para frete grátis!")
+        print("Pedido aprovado, cupom frete grátis!")
     else:
-        print("Frete será calculado normalmente.")
+        print("Frete será calculado!")
 
 def registrar_no_banco(**context):
     conf = context['dag_run'].conf
@@ -32,11 +29,11 @@ def registrar_no_banco(**context):
     print(f"Pedido {pedido_id} registrado no banco de dados com sucesso.")
 
 with DAG(
-    dag_id='triggerdagop_target_pratica',
+    dag_id='triggerdagop_pratica',
     default_args=default_args,
-    schedule=None,  # nunca agendado só executa quando disparado pelo controller
+    schedule=None, 
     catchup=False,
-    tags=['aula', 'trigger_dagrun']
+    tags=['teste', 'trigger_dagrun']
 ) as dag:
 
     processar = PythonOperator(
@@ -45,14 +42,13 @@ with DAG(
     )
 
     registrar = PythonOperator(
-        task_id='registrar_no_banco',
-        python_callable=registrar_no_banco
+        task_id='registrar_banco',
+        python_callable=registrar_banco
     )
 
-    #confirma via bash usando o conf recebido com template Jinja
     confirmar = BashOperator(
         task_id='confirmar_processamento',
-        bash_command='echo "Pedido {{ dag_run.conf[\"pedido_id\"] if dag_run.conf else \"\" }} processado com sucesso!"'
+        bash_command='echo "Pedido {{ dag_run.conf[\"pedido_id\"] if dag_run.conf else \"\" }} confirmado!"'
     )
 
     fim = EmptyOperator(task_id='fim')

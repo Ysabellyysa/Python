@@ -1,10 +1,10 @@
+#Biblioteca utilizadas
 from airflow import DAG
-from airflow.sensors.external_task import ExternalTaskSensor 
+from airflow.sensors.external_task import ExternalTaskSensor  # sensor que espera task de outra DAG erminar
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
-#Dag aguardando processamento concluir
 default_args = {
     'owner': 'Marya',
     'start_date': datetime(2019, 1, 1),
@@ -26,11 +26,11 @@ with DAG(
 
     aguardar_pagamento = ExternalTaskSensor(
         task_id='aguardar_confirmacao_pagamento',
-        external_dag_id='pagamentos_dag',       # DAG precisa finalizar pra continuar
-        external_task_id='confirmar_pagamento', 
-        mode='poke',      
-        timeout=600,    
-        poke_interval=30 
+        external_dag_id='pagamentos_dag', # DAG que precisa aguardar
+        external_task_id='confirmar_pagamento', # task especifica dentro dessa DAG
+        mode='poke', # fica ocupando um worker checando periodicamente
+        timeout=600, # desiste após 600s
+        poke_interval=30 # checa a cada 30s
     )
 
     liberar = PythonOperator(
@@ -45,4 +45,4 @@ with DAG(
 
     fim = EmptyOperator(task_id='fim')
 
-    aguardar_pagamento >> liberar >> notificar >> fim
+    aguardar_pagamento >> liberar >> notificar >> fim # execução

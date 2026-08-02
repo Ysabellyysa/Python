@@ -1,9 +1,9 @@
+#Biblioteca utilizadas 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
 from datetime import datetime
 
-# Pipeline de geração de relatório 
 default_args = {
     'owner': 'Marya',
     'start_date': datetime(2019, 1, 1),
@@ -33,16 +33,15 @@ def notificar_falha():
 with DAG(
     dag_id='trigger_rule_pratica_dag',
     default_args=default_args,
-    schedule='@daily',
+    schedule='@daily',# roda uma vez por dia
     catchup=False,
     tags=['aula', 'trigger_rule']
 ) as dag:
 
-    # Coleta paralela de duas fontes
     coleta_crm = PythonOperator(
         task_id='coletar_dados_crm',
         python_callable=coletar_dados_crm,
-        trigger_rule='all_success' 
+        trigger_rule='all_success'   # roda só se todas upstream tiverem sucesso
     )
 
     coleta_erp = PythonOperator(
@@ -54,19 +53,19 @@ with DAG(
     alerta_falha = PythonOperator(
         task_id='tratar_falha_coleta',
         python_callable=tratar_falha_coleta,
-        trigger_rule='one_failed'
+        trigger_rule='one_failed'# dispara se pelo menos uma upstream falhar
     )
 
     consolidar = PythonOperator(
         task_id='consolidar_dados',
         python_callable=consolidar_dados,
-        trigger_rule='none_failed'
+        trigger_rule='none_failed' # dispara se nenhuma upstream falhou 
     )
 
     gerar = PythonOperator(
         task_id='gerar_relatorio',
         python_callable=gerar_relatorio,
-        trigger_rule='all_done'
+        trigger_rule='all_done' # dispara independente de sucesso ou falha, só espera terminar
     )
 
     notif_sucesso = PythonOperator(
@@ -78,9 +77,9 @@ with DAG(
     notif_falha = PythonOperator(
         task_id='notificar_falha',
         python_callable=notificar_falha,
-        trigger_rule='all_success'
+        trigger_rule='all_success'                        
     )
 
-    [coleta_crm, coleta_erp] >> [alerta_falha, consolidar]
-    [alerta_falha, consolidar] >> gerar
-    gerar >> [notif_sucesso, notif_falha]
+    [coleta_crm, coleta_erp] >> [alerta_falha, consolidar]   # as duas coletas alimentam, alerta e consolida
+    [alerta_falha, consolidar] >> gerar                      # gerar espera ambos os caminhos
+    gerar >> [notif_sucesso, notif_falha]                    # depois dispara as duas notificações 

@@ -1,9 +1,8 @@
+#Biblioteca utilizadas 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
 
-#onfigurações básicas da DAG
-#
 default_args = {
     'start_date': datetime(2019, 1, 1),
     'owner': 'Marya',
@@ -17,20 +16,17 @@ def finalizar():
 
 with DAG(dag_id='parallel_pratica_dag', schedule=None, default_args=default_args, catchup=False) as dag:
 
-    #Cria 3 tarefas 
     processos = [
         PythonOperator(
-            task_id=f'processo_paralelo_{i}',
+            task_id=f'processo_paralelo_{i}', # gera task_ids processo_paralelo_1, _2, _3
             python_callable=tarefa_paralela,
-            op_args=[i]
-        ) for i in range(1, 4)
+            op_args=[i]  # passa i como argumento posicional pra função
+        ) for i in range(1, 4)  # list comprehension cria 3 operators
     ]
 
-    #aguarda os processos 
     conclusao = PythonOperator(
         task_id='conclusao_geral',
         python_callable=finalizar
     )
 
-    # o fluxo
-    processos >> conclusao
+    processos >> conclusao  #  todas as 3 devem terminar antes de conclusao

@@ -1,3 +1,4 @@
+#Bibliotecas utilizadas
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime
@@ -8,9 +9,9 @@ default_args = {
 }
 
 with DAG(
-    dag_id='queue_dag_pratica', 
-    schedule=None, 
-    default_args=default_args, 
+    dag_id='queue_dag_pratica',
+    schedule=None,
+    default_args=default_args,
     catchup=False,
     tags=['aula', 'infra']
 ) as dag:
@@ -18,15 +19,13 @@ with DAG(
     tarefa_comum = BashOperator(
         task_id='tarefa_geral',
         bash_command='echo "Rodando worker padrão"',
-        queue='default'
+        queue='default'  # fila do Celery que o worker precisa escutar
     )
 
-    #esta tarefa seria direcionada para um worker com GPU,mas Spark e o parâmetro que é o que define para onde a tarefa fica
     tarefa_especifica = BashOperator(
         task_id='tarefa_pesada_especial',
         bash_command='echo "Rodando máquina de alta performance"',
-        queue='high_mem_queue' 
+        queue='high_mem_queue'# exige um worker dedicado escutando essa fila
     )
 
-    #Execução em paralelo para teste de distribuição
-    [tarefa_comum, tarefa_especifica]
+    [tarefa_comum, tarefa_especifica]   # apenas lista as duas não cria dependência real

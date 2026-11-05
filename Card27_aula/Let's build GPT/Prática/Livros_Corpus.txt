@@ -1,0 +1,142 @@
+INTRODUCTION
+Reading has always been shaped by the way readers talk about books. Book clubs, classroom discussions, library
+recommendations, and online reviews all help readers decide what to read next, understand difficult passages, and
+connect a story to their own lives. In recent years, digital reading platforms have grown into large ecosystems
+where millions of readers browse catalogs, highlight passages, and write short comments. Despite this growth,
+most platforms still rely on simple tools such as star ratings, genre tags, and fixed lists of similar titles. These
+tools say little about why a reader enjoyed a book, how a reader feels about a character, or what kind of story a
+reader might want after finishing a long novel. As a result, recommendations often feel generic and discussions
+remain shallow.
+Recent advances in large language models (LLMs) have opened new possibilities for conversational systems that
+understand text and respond with fluent, context-aware language. Such models can summarize chapters, explain
+themes, compare authors, and imitate the tone of different literary traditions. However, their use as reading
+companions is still limited. Existing tools often produce vague summaries, mix up plots and characters, or give
+the same advice to every reader. Few studies examine how a language model can be adapted to the specific
+vocabulary and style of literary discussion, and even fewer measure whether readers actually find the result useful.
+This study investigates the use of a fine-tuned language model as an adaptive reading companion. The system was
+trained on a corpus of public domain books, reading guides, and discussion notes, with the goal of producing
+answers that are faithful to the text, sensitive to the reader, and pleasant to read. Unlike template-based
+recommendation engines, the proposed approach generates original explanations for each question, adjusting its
+tone and level of detail to the reader. By testing the system on different reading scenarios and literary genres, the
+study explores how language models can support reading without replacing it.
+The remainder of this paper is structured as follows. The next section reviews the literature on book
+recommendation, computational analysis of literature, and conversational reading tools. The Method section
+describes the corpus, the preprocessing steps, the training configuration, and the evaluation design. The Results
+section reports the performance of the model across several quality dimensions, including faithfulness to the text,
+helpfulness, and response time. The Conclusion summarizes the main contributions and limitations, and outlines
+directions for future work on language models and reading.
+1. RELATED WORKS
+Research on book recommendation began with systems that compared the ratings of different readers. These
+collaborative methods work well when many readers have rated the same titles, but they struggle with new books,
+rare genres, and readers who have rated very few titles. Content-based methods tried to solve this problem by
+describing each book with keywords, subjects, and short summaries. While useful, these descriptions are usually
+written by publishers or librarians and rarely capture the experience of reading, such as pacing, mood, or
+emotional intensity. Hybrid systems combine both ideas, yet they still treat a book as a small set of labels instead
+of a rich piece of language.
+Computational literary studies have taken a different path by analyzing the text itself. Researchers have measured
+sentence length, vocabulary richness, and the frequency of common words to compare authors and detect changes
+in style over time. Network methods have mapped the relations between characters in novels, showing how
+protagonists, allies, and rivals are connected across chapters. Topic models have been used to study how themes
+rise and fall in large collections of nineteenth century fiction. These studies show that books carry measurable
+patterns, but most of them aim at scholars and not at everyday readers who want a simple conversation about a
+story.
+Language models have recently been applied to creative and educational tasks related to books. Some systems
+summarize long novels by splitting them into chapters and combining short summaries into a final overview.
+Others generate study questions for students, write alternative endings, or answer questions about a given
+passage. Studies of these systems report that fluent output is easy to obtain, but faithfulness is harder to guarantee.
+Models may invent events that never happened, attribute quotes to the wrong character, or describe a book they
+have never seen with great confidence. Such errors are especially harmful in reading contexts, where a reader
+may trust the answer instead of checking the text.
+Conversational reading companions form a smaller body of work. Early chatbots for libraries answered simple
+questions about opening hours and available titles. More recent prototypes allow readers to discuss a book while
+reading it, receive explanations of unfamiliar words, or ask for the meaning of a symbol. Surveys of readers
+suggest that people value these tools most when they do not reveal too much of the plot, respect the reader's own
+interpretation, and admit uncertainty. Still, few studies fine-tune a model directly on literary material or measure
+the effect of such training on style, faithfulness, and speed. This study addresses that gap by building and
+evaluating a reading companion trained on a focused collection of books and reading guides.
+2. METHODOLOGY
+This study follows a case study design to examine how a fine-tuned language model behaves as a reading
+companion. The experimental setting was a small reading platform in which readers could ask questions about
+books, request recommendations, and discuss themes. A compact open-source language model was chosen as the
+base architecture because it offers a good balance between quality, flexibility, and the low computational cost
+needed for repeated training runs. The objective was to compare the behavior of the model before and after
+fine-tuning on literary material.
+The training corpus was compiled from public domain novels, short stories, essays, and reading guides written for
+students and book clubs. In total, the dataset contained about 2.4 million tokens drawn from 600 books, 4,000
+chapter summaries, 9,000 discussion questions, and 1,200 reader reviews. Only texts that were free to use were
+included, and all personal information was removed from the reviews. The collection covered several genres,
+including adventure, mystery, romance, science fiction, historical fiction, and poetry, so that the model would meet
+a wide range of narrative styles and vocabularies.
+Before training, the data passed through a multi-step preprocessing pipeline. Duplicate passages were removed,
+page numbers and headers were deleted, and punctuation was normalized. Long books were divided into passages
+of similar length that kept paragraphs and dialogue together, so that each training example held a complete idea.
+Reading guides and reviews were paired with the passages they discussed, which allowed the model to learn the
+link between a piece of text and the way readers talk about it. A small part of the data was set aside for validation
+and for the final tests.
+The base model was fine-tuned with a learning rate of 3e-5 and a batch size of 32 for 20 training epochs. Dropout
+was used to reduce overfitting, and a cosine schedule slowly lowered the learning rate. Checkpoints were saved
+after every epoch and compared on the validation set. The final checkpoint was chosen by balancing validation
+loss with the quality of sample answers read by the research team. This choice was important because the lowest
+validation loss did not always produce the most natural answers.
+To evaluate the system, a set of 60 reading scenarios was built. The scenarios covered six types of requests:
+recommending a book, summarizing a chapter, explaining a theme, describing a character, comparing two authors,
+and explaining a difficult passage. Each scenario was tested on several genres. Faithfulness to the text was judged
+by three experienced librarians, who checked each answer against the original book. Helpfulness and readability
+were rated by 40 volunteer readers on a 5-point Likert scale. Finally, the time needed to produce each answer was
+recorded in order to test whether the system could be used in an interactive setting.
+3. RESULTS
+The training process was followed over 20 epochs. As shown in Figure 1, both the training loss and the
+validation loss fell quickly during the first epochs and then slowed down. The validation loss stayed close to the
+training loss until the twelfth epoch, after which a small gap appeared. This gap suggests that the model began to
+memorize some passages, which is why the checkpoint from the fifteenth epoch was selected instead of the last
+one. Even so, the curves show that the model learned the structure and vocabulary of the corpus in a stable way.
+Figure 1: Training and validation loss during fine-tuning.
+Faithfulness to the text was the most important quality dimension. According to the librarians, 89.4% of the
+answers were consistent with the original books, including the names of characters, the order of events, and the
+meaning of key scenes. The remaining answers contained small errors, such as mixing up two minor characters or
+placing an event in the wrong chapter. Serious inventions, in which the model described events that never
+happened, appeared in only 3% of the answers. Faithfulness was highest for adventure and mystery novels and
+lowest for poetry, where meaning depends strongly on interpretation.
+Figure 2: Faithfulness scores by literary genre.
+Helpfulness was measured by the group of 40 readers. The average rating was 4.4 out of 5, and most answers
+received a 4 or a 5. Readers praised the clear explanations of themes and the way the model adjusted its language
+for beginners and advanced readers. Recommendations were rated slightly lower than explanations, because some
+readers wanted more surprising suggestions and fewer well-known classics. Comments also showed that readers
+liked answers that avoided spoilers when asked, which the model did correctly in most cases.
+Figure 3: Reader ratings of helpfulness on a 5-point Likert scale.
+Style was evaluated by asking the readers whether an answer sounded natural and appropriate for the book being
+discussed. The fine-tuned model scored clearly higher than the base model, especially on questions about older
+books, where the base model often used a modern and flat tone. When describing a gothic novel, for example, the
+fine-tuned model used slower sentences and darker words, while for an adventure story it chose short and lively
+sentences. This ability to follow the mood of a book was one of the clearest benefits of fine-tuning on literary
+material.
+Figure 4: Naturalness and style scores for the base and the fine-tuned model.
+Response time was also measured. The average time to produce an answer was 620 milliseconds, with a small
+variation between request types. Summaries of long chapters took the longest, while short questions about a
+single word or character took the least. All answers were produced in less than two seconds, which is acceptable
+for a conversation in which readers type a question and wait for a reply.
+Figure 5: Response time by request type.
+Error analysis showed that 81% of the answers had no visible problems. Among the remaining answers, 12%
+contained small factual mistakes about characters or events, 5% were too long or repeated the same idea, and 2%
+gave advice that did not match the reader's request. Although these numbers are low, they show that readers may
+still trust a confident answer that is wrong. For this reason, the study recommends that reading companions show
+the passage they used, invite readers to check the book, and say clearly when they are not sure.
+Figure 6: Distribution of error types in the generated answers.
+4. CONCLUSION
+This study examined the use of a fine-tuned language model as a reading companion for a digital reading
+platform. By training on about 2.4 million tokens of public domain books, reading guides, and discussion notes,
+the model reached strong results on several measures. Faithfulness to the text was 89.4%, the average helpfulness
+rating given by readers was 4.4 out of 5, and the average response time was 620 milliseconds. These results
+suggest that a small and focused model can support reading in a useful, natural, and fast way.
+Several limitations remain. The model sometimes confused minor characters, struggled with poetry and highly
+symbolic passages, and gave recommendations that were too close to well-known titles. The corpus contained only
+public domain material, which limits the model's knowledge of recent books and contemporary writing. The
+evaluation also used a limited number of readers and a short period of testing, so the long term effect on reading
+habits is still unknown.
+Future work should combine the language model with a retrieval system that finds the exact passage needed to
+answer a question and shows it to the reader. Reinforcement learning from reader feedback could help the system
+learn which explanations are most helpful and which recommendations feel too predictable. It would also be
+valuable to test the approach in schools and libraries, to include books in several languages, and to study how
+conversations with a reading companion change the time that readers spend with the books themselves. Overall,
+this study offers a first step toward reading tools that help readers think and talk about books without taking the
+place of the books.
